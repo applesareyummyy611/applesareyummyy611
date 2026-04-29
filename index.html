@@ -1,42 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cool car website</title>
+    <title>Car Driving Simulator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <h1>Cool Car Website 🏎️</h1>
-    <p>Pick your favorite car</p>
 
-    <div class="car-container">
-        <img src="https://hips.hearstapps.com/hmg-prod/images/2026-chevrolet-corvette-zr1x-28-69971dc90285c.jpg?resize=2048:*"
-             alt="Corvette"
-             id="car"
-             onclick="showCar('corvette')">
+<h1>Choose Your Car 🏎️</h1>
 
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQDtc60lPDfV9yfL2yLsIQP4sjlEjm-l3D3Q&s:*"
-             alt="Lamborghini"
-             id="car2"
-             onclick="showCar('lambo')">
-    </div>
+<div class="car-container">
+    <img src="https://hips.hearstapps.com/hmg-prod/images/2026-chevrolet-corvette-zr1x-28-69971dc90285c.jpg?resize=2048:*"
+         onclick="startGame('corvette')">
 
-    <p id="info">Click a car to learn about it 👀</p>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQDtc60lPDfV9yfL2yLsIQP4sjlEjm-l3D3Q&s:*"
+         onclick="startGame('lambo')">
+</div>
 
-    <button onclick="alert('wow you actually clicked it')">
-        Click Me
-    </button>
+<!-- GAME AREA -->
+<div id="gameArea">
+    <img id="playerCar">
+</div>
 
-    <script>
-        function showCar(car) {
-            let text = document.getElementById("info");
+<script>
+let car = document.getElementById("playerCar");
+let x = 200;
+let y = 200;
 
-            if (car === "corvette") {
-                text.innerHTML = "This is a 2026 Chevrolet Corvette ZR1X.";
-            } else if (car === "lambo") {
-                text.innerHTML = "This is a 2020 Lamborghini Huracan STO.";
-            }
-        }
-    </script>
+function startGame(choice) {
+    document.querySelector(".car-container").style.display = "none";
+    document.getElementById("gameArea").style.display = "block";
+
+    if (choice === "corvette") {
+        car.src = "https://hips.hearstapps.com/hmg-prod/images/2026-chevrolet-corvette-zr1x-28-69971dc90285c.jpg?resize=2048:*";
+    } else {
+        car.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQDtc60lPDfV9yfL2yLsIQP4sjlEjm-l3D3Q&s:*";
+    }
+}
+
+document.addEventListener("keydown", function(e) {
+    if (e.key === "ArrowUp") y -= 10;
+    if (e.key === "ArrowDown") y += 10;
+    if (e.key === "ArrowLeft") x -= 10;
+    if (e.key === "ArrowRight") x += 10;
+
+    car.style.top = y + "px";
+    car.style.left = x + "px";
+});
+</script>
+
 </body>
 </html>
