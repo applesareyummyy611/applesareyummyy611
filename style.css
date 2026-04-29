@@ -17,20 +17,26 @@ p {
 .car-container {
     display: flex;
     justify-content: center;
+    align-items: center; /* THIS fixes uneven heights */
     gap: 30px;
     margin-top: 20px;
+    flex-wrap: wrap; /* makes it not break on smaller screens */
 }
 
-#car, #car2 {
+/* Apply same styling to ALL images inside container */
+.car-container img {
     width: 400px;
+    height: 250px; /* forces same size */
+    object-fit: cover; /* prevents stretching */
     border-radius: 15px;
     box-shadow: 0 0 20px red;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
 }
 
-#car:hover, #car2:hover {
+.car-container img:hover {
     transform: scale(1.05);
+    box-shadow: 0 0 35px red; /* stronger glow on hover */
 }
 
 button {
