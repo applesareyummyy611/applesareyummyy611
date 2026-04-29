@@ -10,19 +10,31 @@ h1 {
     text-shadow: 0 0 10px red;
 }
 
-#car {
-    width: 500px;
-    height: auto;
-    border-radius: 15px;
-    box-shadow: 0 0 25px red;
-    transition: transform 0.3s ease;
+p {
+    font-size: 18px;
 }
 
-#car:hover {
+.car-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+#car, #car2 {
+    width: 400px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px red;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+#car:hover, #car2:hover {
     transform: scale(1.05);
 }
 
 button {
+    margin-top: 20px;
     background-color: red;
     color: white;
     padding: 10px 20px;

@@ -1,16 +1,42 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title> Cool car website</title>
-        <link rel="stylesheet" type="text/css" href="style.css">
-    </head>
-    <body>
-        <h1>Cool car website</h1>
-        <p>This is a cool car</p>
-        <img src="https://hips.hearstapps.com/hmg-prod/images/2026-chevrolet-corvette-zr1x-28-69971dc90285c.jpg?resize=2048:*" alt="100% my car" id="car">
-        <p>This is a 2026 Chevrolet Corvette ZR1X</p>
-        <button onclick="alert('wow you actually clicked it')">
-            Click Me
-        </button>
-    </body>
-        
+<head>
+    <title>Cool car website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Cool Car Website 🏎️</h1>
+    <p>Pick your favorite car</p>
+
+    <div class="car-container">
+        <img src="https://hips.hearstapps.com/hmg-prod/images/2026-chevrolet-corvette-zr1x-28-69971dc90285c.jpg?resize=2048:*"
+             alt="Corvette"
+             id="car"
+             onclick="showCar('corvette')">
+
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQDtc60lPDfV9yfL2yLsIQP4sjlEjm-l3D3Q&s:*"
+             alt="Lamborghini"
+             id="car2"
+             onclick="showCar('lambo')">
+    </div>
+
+    <p id="info">Click a car to learn about it 👀</p>
+
+    <button onclick="alert('wow you actually clicked it')">
+        Click Me
+    </button>
+
+    <script>
+        function showCar(car) {
+            let text = document.getElementById("info");
+
+            if (car === "corvette") {
+                text.innerHTML = "This is a 2026 Chevrolet Corvette ZR1X 💨";
+            } else if (car === "lambo") {
+                text.innerHTML = "This is a Lamborghini. Rich people activities 🤑";
+            }
+        }
+    </script>
+</body>
+</html>
