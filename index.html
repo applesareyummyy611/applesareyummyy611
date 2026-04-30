@@ -1,70 +1,115 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Car Driving Simulator</title>
+    <title>CHAOS DRIVE 9000</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>Choose Your Car 🏎️</h1>
-
-<div class="car-container">
-    <img src="https://hips.hearstapps.com/hmg-prod/images/2026-chevrolet-corvette-zr1x-28-69971dc90285c.jpg?resize=2048:*"
-         onclick="startGame('corvette')">
-
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQDtc60lPDfV9yfL2yLsIQP4sjlEjm-l3D3Q&s:*"
-         onclick="startGame('lambo')">
+<div id="menu">
+    <h1>CHAOS DRIVE 9000 😤</h1>
+    <button onclick="startGame()">START</button>
 </div>
 
-<!-- GAME AREA -->
-<div id="gameArea">
-    <img id="playerCar">
+<div id="game">
+    <div id="score">Score: 0</div>
+    <div id="gameArea">
+        <img id="player" src="https://hips.hearstapps.com/hmg-prod/images/2026-chevrolet-corvette-zr1x-28-69971dc90285c.jpg">
+    </div>
 </div>
 
 <script>
-let car = document.getElementById("playerCar");
-let x = 200;
-let y = 200;
+let player = document.getElementById("player");
+let gameArea = document.getElementById("gameArea");
+let scoreEl = document.getElementById("score");
 
-// track keys being held
+let x = 300, y = 300;
 let keys = {};
+let speed = 5;
+let score = 0;
 
-// when key is pressed
-document.addEventListener("keydown", function(e) {
-    keys[e.key] = true;
-});
+function startGame() {
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("game").style.display = "block";
+    spawnStuff();
+    gameLoop();
+}
 
-// when key is released
-document.addEventListener("keyup", function(e) {
-    keys[e.key] = false;
-});
+document.addEventListener("keydown", e => keys[e.key] = true);
+document.addEventListener("keyup", e => keys[e.key] = false);
 
-// smooth game loop
 function gameLoop() {
-    if (keys["ArrowUp"]) y -= 5;
-    if (keys["ArrowDown"]) y += 5;
-    if (keys["ArrowLeft"]) x -= 5;
-    if (keys["ArrowRight"]) x += 5;
+    let currentSpeed = keys["Shift"] ? 10 : speed;
 
-    car.style.top = y + "px";
-    car.style.left = x + "px";
+    if (keys["ArrowUp"]) y -= currentSpeed;
+    if (keys["ArrowDown"]) y += currentSpeed;
+    if (keys["ArrowLeft"]) x -= currentSpeed;
+    if (keys["ArrowRight"]) x += currentSpeed;
+
+    player.style.top = y + "px";
+    player.style.left = x + "px";
+
+    checkCollisions();
+    chaosMode();
 
     requestAnimationFrame(gameLoop);
 }
 
-// start loop immediately
-gameLoop();
+function spawnStuff() {
+    setInterval(() => {
+        let coin = document.createElement("img");
+        coin.src = "https://cdn-icons-png.flaticon.com/512/138/138292.png";
+        coin.className = "coin";
+        coin.style.top = Math.random() * window.innerHeight + "px";
+        coin.style.left = Math.random() * window.innerWidth + "px";
+        gameArea.appendChild(coin);
+    }, 1500);
 
-// start game when car is selected
-function startGame(choice) {
-    document.querySelector(".car-container").style.display = "none";
-    document.getElementById("gameArea").style.display = "block";
+    setInterval(() => {
+        let obs = document.createElement("img");
+        obs.src = "https://cdn-icons-png.flaticon.com/512/565/565547.png";
+        obs.className = "obstacle";
+        obs.style.top = Math.random() * window.innerHeight + "px";
+        obs.style.left = Math.random() * window.innerWidth + "px";
+        gameArea.appendChild(obs);
+    }, 2000);
+}
 
-    if (choice === "corvette") {
-        car.src = "https://hips.hearstapps.com/hmg-prod/images/2026-chevrolet-corvette-zr1x-28-69971dc90285c.jpg?resize=2048:*";
-    } else {
-        car.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQDtc60lPDfV9yfL2yLsIQP4sjlEjm-l3D3Q&s:*";
+function checkCollisions() {
+    document.querySelectorAll(".coin").forEach(c => {
+        if (isColliding(player, c)) {
+            c.remove();
+            score += 10;
+            scoreEl.innerText = "Score: " + score;
+        }
+    });
+
+    document.querySelectorAll(".obstacle").forEach(o => {
+        if (isColliding(player, o)) {
+            alert("GAME OVER 😭 Score: " + score);
+            location.reload();
+        }
+    });
+}
+
+function isColliding(a, b) {
+    let r1 = a.getBoundingClientRect();
+    let r2 = b.getBoundingClientRect();
+
+    return !(r1.right < r2.left || 
+             r1.left > r2.right || 
+             r1.bottom < r2.top || 
+             r1.top > r2.bottom);
+}
+
+function chaosMode() {
+    if (Math.random() < 0.01) {
+        document.body.style.background =
+            "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+
+        document.body.style.transform =
+            "translate(" + (Math.random()*10-5) + "px," + (Math.random()*10-5) + "px)";
     }
 }
 </script>
