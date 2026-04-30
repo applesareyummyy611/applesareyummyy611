@@ -14,8 +14,10 @@
 
 <div id="game">
     <div id="score">Score: 0</div>
+
     <div id="gameArea">
-        <img id="player" src="https://hips.hearstapps.com/hmg-prod/images/2026-chevrolet-corvette-zr1x-28-69971dc90285c.jpg">
+        <img id="player"
+        src="https://cdn-icons-png.flaticon.com/512/744/744465.png">
     </div>
 </div>
 
@@ -28,17 +30,25 @@ let x = 300, y = 300;
 let keys = {};
 let speed = 5;
 let score = 0;
+let gameRunning = false;
 
+// start game
 function startGame() {
+    if (gameRunning) return;
+    gameRunning = true;
+
     document.getElementById("menu").style.display = "none";
     document.getElementById("game").style.display = "block";
+
     spawnStuff();
     gameLoop();
 }
 
+// key tracking
 document.addEventListener("keydown", e => keys[e.key] = true);
 document.addEventListener("keyup", e => keys[e.key] = false);
 
+// main loop
 function gameLoop() {
     let currentSpeed = keys["Shift"] ? 10 : speed;
 
@@ -47,8 +57,17 @@ function gameLoop() {
     if (keys["ArrowLeft"]) x -= currentSpeed;
     if (keys["ArrowRight"]) x += currentSpeed;
 
-    player.style.top = y + "px";
+    // boundaries
+    let maxX = gameArea.clientWidth - player.clientWidth;
+    let maxY = gameArea.clientHeight - player.clientHeight;
+
+    if (x < 0) x = 0;
+    if (y < 0) y = 0;
+    if (x > maxX) x = maxX;
+    if (y > maxY) y = maxY;
+
     player.style.left = x + "px";
+    player.style.top = y + "px";
 
     checkCollisions();
     chaosMode();
@@ -56,13 +75,16 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
+// spawn coins + obstacles
 function spawnStuff() {
     setInterval(() => {
         let coin = document.createElement("img");
         coin.src = "https://cdn-icons-png.flaticon.com/512/138/138292.png";
         coin.className = "coin";
-        coin.style.top = Math.random() * window.innerHeight + "px";
-        coin.style.left = Math.random() * window.innerWidth + "px";
+
+        coin.style.top = Math.random() * (gameArea.clientHeight - 40) + "px";
+        coin.style.left = Math.random() * (gameArea.clientWidth - 40) + "px";
+
         gameArea.appendChild(coin);
     }, 1500);
 
@@ -70,12 +92,15 @@ function spawnStuff() {
         let obs = document.createElement("img");
         obs.src = "https://cdn-icons-png.flaticon.com/512/565/565547.png";
         obs.className = "obstacle";
-        obs.style.top = Math.random() * window.innerHeight + "px";
-        obs.style.left = Math.random() * window.innerWidth + "px";
+
+        obs.style.top = Math.random() * (gameArea.clientHeight - 40) + "px";
+        obs.style.left = Math.random() * (gameArea.clientWidth - 40) + "px";
+
         gameArea.appendChild(obs);
     }, 2000);
 }
 
+// collision detection
 function checkCollisions() {
     document.querySelectorAll(".coin").forEach(c => {
         if (isColliding(player, c)) {
@@ -97,12 +122,13 @@ function isColliding(a, b) {
     let r1 = a.getBoundingClientRect();
     let r2 = b.getBoundingClientRect();
 
-    return !(r1.right < r2.left || 
-             r1.left > r2.right || 
-             r1.bottom < r2.top || 
+    return !(r1.right < r2.left ||
+             r1.left > r2.right ||
+             r1.bottom < r2.top ||
              r1.top > r2.bottom);
 }
 
+// random chaos effect
 function chaosMode() {
     if (Math.random() < 0.01) {
         document.body.style.background =
