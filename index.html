@@ -27,6 +27,36 @@ let car = document.getElementById("playerCar");
 let x = 200;
 let y = 200;
 
+// track keys being held
+let keys = {};
+
+// when key is pressed
+document.addEventListener("keydown", function(e) {
+    keys[e.key] = true;
+});
+
+// when key is released
+document.addEventListener("keyup", function(e) {
+    keys[e.key] = false;
+});
+
+// smooth game loop
+function gameLoop() {
+    if (keys["ArrowUp"]) y -= 5;
+    if (keys["ArrowDown"]) y += 5;
+    if (keys["ArrowLeft"]) x -= 5;
+    if (keys["ArrowRight"]) x += 5;
+
+    car.style.top = y + "px";
+    car.style.left = x + "px";
+
+    requestAnimationFrame(gameLoop);
+}
+
+// start loop immediately
+gameLoop();
+
+// start game when car is selected
 function startGame(choice) {
     document.querySelector(".car-container").style.display = "none";
     document.getElementById("gameArea").style.display = "block";
@@ -37,16 +67,6 @@ function startGame(choice) {
         car.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQDtc60lPDfV9yfL2yLsIQP4sjlEjm-l3D3Q&s:*";
     }
 }
-
-document.addEventListener("keydown", function(e) {
-    if (e.key === "ArrowUp") y -= 10;
-    if (e.key === "ArrowDown") y += 10;
-    if (e.key === "ArrowLeft") x -= 10;
-    if (e.key === "ArrowRight") x += 10;
-
-    car.style.top = y + "px";
-    car.style.left = x + "px";
-});
 </script>
 
 </body>
